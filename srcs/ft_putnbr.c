@@ -6,44 +6,27 @@
 /*   By: mobenais <mobenais@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 01:03:06 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/18 05:57:37 by mobenais         ###   ########lyon.fr   */
+/*   Updated: 2025/11/18 18:21:21 by mobenais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdint.h>
 #include "../include/libft.h"
 
-void	ft_putnbr_baseMIN(unsigned int nbr, int r)
+void	ft_putnbr_base(uintptr_t nbr, int r)
 {
-	unsigned int	int_base;
-    char    *base;
+	uintptr_t	int_base;
+	char		*base;
 
 	if (r == 0)
 	{
 		ft_putstr("0x");
 	}
-    base = "0123456789abcdef";
+	base = "0123456789abcdef";
 	int_base = ft_strlen(base);
 	if (nbr >= int_base)
 	{
-		ft_putnbr_baseMIN(nbr / int_base, 1);
-	}
-	ft_putchar(base[nbr % int_base]);
-}
-
-void	ft_putnbr_baseMAJ(unsigned int nbr, int r)
-{
-	unsigned int	int_base;
-    char    *base;
-
-	if (r == 0)
-	{
-		ft_putstr("0x");
-	}
-    base = "0123456789ABCDEF";
-	int_base = ft_strlen(base);
-	if (nbr >= int_base)
-	{
-		ft_putnbr_baseMAJ(nbr / int_base, 1);
+		ft_putnbr_base(nbr % int_base, 0);
 	}
 	ft_putchar(base[nbr % int_base]);
 }
