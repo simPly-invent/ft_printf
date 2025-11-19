@@ -6,15 +6,13 @@
 /*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 12:21:29 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/19 15:09:41 by mobenais         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:57:00 by mobenais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdarg.h>
 #include "../include/ft_printf.h"
-
-
 
 static void	exec_bloc(va_list ptr, char c, int *nb)
 {

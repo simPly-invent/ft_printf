@@ -6,11 +6,12 @@
 /*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 01:03:06 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/19 15:04:03 by mobenais         ###   ########.fr       */
+/*   Updated: 2025/11/19 15:55:31 by mobenais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_printf.h"
+
 
 void	ft_putstr(char *str, int *nb)
 {

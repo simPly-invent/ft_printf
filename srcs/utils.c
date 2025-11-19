@@ -1,8 +1,6 @@
 #include "../include/printf.h"
 #include <unistd.h>
 
-
-
 void ft_putchar(int c, int *nb)
 {
 	write(1, &c, 1);
