@@ -1,27 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 22:56:10 by mobenais          #+#    #+#             */
+/*   Updated: 2025/11/19 23:14:22 by mobenais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/printf.h"
 #include <unistd.h>
+#include <limits.h>
 
-void ft_putchar(int c, int *nb)
+void	ft_putchar(int c, int *nb)
 {
 	write(1, &c, 1);
-    *nb = *nb + 1;
-
-}
-
-char	ft_find_type(char c)
-{
-	int	i;
-	char *base;
-
-	base = "cspdiuxX";
-	i = 0;
-	while (base[i])
-	{
-		if(base[i] == c)
-			return (c);
-		i++;
-	}
-	return 0;
+	*nb = *nb + 1;
 }
 
 int	ft_strlen(char *s)
@@ -38,7 +34,8 @@ void	ft_putnbr(int nbr, int *nb)
 {
 	if (nbr == -2147483648)
 	{
-		write(1, "-2147483648", 11) ;
+		write(1, "-2147483648", 11);
+		*nb = *nb + 11;
 		return ;
 	}
 	if (nbr < 0)

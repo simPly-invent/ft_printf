@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mohamed <mohamed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 12:21:29 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/19 15:57:00 by mobenais         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:52:18 by mobenais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,34 @@
 
 static void	exec_bloc(va_list ptr, char c, int *nb)
 {
-	if (ft_find_type(c) == 'd')
+	if (c == 'd')
 		ft_putnbr(va_arg(ptr, int), nb);
-	else if(ft_find_type(c) == 'c')
+	else if (c == 'c')
 		ft_putchar((char)va_arg(ptr, int), nb);
-	else if (ft_find_type(c) == 's')
+	else if (c == 's')
 		ft_putstr(va_arg(ptr, char *), nb);
-	else if (ft_find_type(c) == 'p')
-		ft_putnbr_baseaddr(va_arg(ptr, unsigned long), 0, nb);
-	else if (ft_find_type(c) == 'i')
+	else if (c == 'p')
+		ft_verif_addr(va_arg(ptr, void *), 0, nb);
+	else if (c == 'i')
 		ft_putnbr(va_arg(ptr, int), nb);
-	else if (ft_find_type(c) == 'u')
+	else if (c == 'u')
 		ft_putnbr_uc(va_arg(ptr, unsigned int), nb);
-	else if (ft_find_type(c) == 'x')
-		ft_print_nbrhexa(va_arg(ptr, unsigned int), c, nb);
-	else if (ft_find_type(c) == 'X')
-		ft_print_nbrhexa(va_arg(ptr, unsigned int), c, nb);
+	else if (c == 'x')
+		ft_print_nbrhexa(va_arg(ptr, int), c, nb);
+	else if (c == 'X')
+		ft_print_nbrhexa(va_arg(ptr, int), c, nb);
+	else if (c == '%')
+	{
+		*nb += 1;
+		write(1, "%", 1);
+	}
 }
 
 int	ft_printf(const char *str, ...)
 {
-	int	i;
+	int		i;
 	va_list	ptr;
-	int	len;
+	int		len;
 
 	i = 0;
 	len = 0;
@@ -62,14 +67,22 @@ int	ft_printf(const char *str, ...)
 	va_end(ptr);
 	return (len);
 }
+/*
+#include <stdio.h>
+int main(void)
+{
+	int a = 13;
+	void *b;
+	char c = 'c';
+	int x = 42;
+	int X = 42;
+	char *s = NULL;
 
-// #include <stdio.h>
-// int main(void)
-// {
-// 	char *s = "sardoche";
-
-// 	printf("%d\n", ft_printf("%s", s));
-// 	printf("%d\n", printf("%s", s));
-// 	return	(0);
-// }
-
+ 	printf("%d\n", ft_printf("my printf : \nint d :%d\nvoid * :%p\nchar : %c\nHexIntMin %x\nHexIntMaj : %X\n pourcents : %%\n", a, b, c, x, X));
+	ft_printf(" NULL %s NULL\n", s);
+	printf("----------------------------------\n");
+ 	printf("%d\n", printf("printf : \nint d :%d\nvoid * :%p\nchar : %c\nHexIntMin %x\nHexIntMaj : %X\n pourcents : %%\n", a, b, c, x, X));
+	printf(" NULL %s NULL\n", s);
+ 	return	(0);
+}
+*/
