@@ -6,7 +6,7 @@
 /*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 01:03:06 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/20 12:52:29 by mobenais         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:51:32 by mobenais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@ int	ft_verif_addr(void *ptr, int r, int *nb)
 		return (write(1, "(nil)", 5));
 	}
 	ft_putnbr_baseaddr((unsigned long)ptr, r, nb);
+	return (0);
+}
+
+int	ft_verif_str(char *str, int *nb)
+{
+	if (!str)
+	{
+		*nb += 6;
+		return (write(1, "(null)", 6));
+	}
+	ft_putstr(str, nb);
 	return (0);
 }
 
