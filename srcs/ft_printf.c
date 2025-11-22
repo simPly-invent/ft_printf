@@ -6,7 +6,7 @@
 /*   By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 12:21:29 by mobenais          #+#    #+#             */
-/*   Updated: 2025/11/20 15:52:50 by mobenais         ###   ########.fr       */
+/*   Updated: 2025/11/22 22:30:53 by mohamed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	ft_printf(const char *str, ...)
 	va_end(ptr);
 	return (len);
 }
+/*
 #include <stdio.h>
 int main(void)
 {
@@ -83,3 +84,4 @@ int main(void)
 	printf(" NULL %s NULL\n", s);
  	return	(0);
 }
+*/
