@@ -6,7 +6,7 @@
 #    By: mobenais <mobenais@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/17 12:20:52 by mobenais          #+#    #+#              #
-#    Updated: 2026/10/03 23:04:00 by tristan-gscn     ###   ########.fr        #
+#    Updated: 2026/10/03 23:06:00 by tristan-gscn     ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ MKDIR		= mkdir -p
 # Directories
 INCDIR		= include
 SRCDIR		= src
-MANDATORY_DIR	= $(SRCDIR)/mandatory
 OBJDIR		= .obj
 DEPDIR		= .dep
 
@@ -32,26 +31,26 @@ IFLAGS		= -I$(INCDIR)
 CF		= $(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS)
 
 # Sources
-MANDATORY_SRCS	= ft_printf.c \
+SRCS		= ft_printf.c \
 		  utils.c \
 		  utilsbis.c
 
 # Objects and Dependencies
-MANDATORY_OBJS	= $(addprefix $(OBJDIR)/mandatory/, $(MANDATORY_SRCS:.c=.o))
-MANDATORY_DEPS	= $(addprefix $(DEPDIR)/mandatory/, $(MANDATORY_SRCS:.c=.d))
+OBJS		= $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
+DEPS		= $(addprefix $(DEPDIR)/, $(SRCS:.c=.d))
 
 # Rules
 all: $(NAME)
 
-$(NAME): $(MANDATORY_OBJS)
+$(NAME): $(OBJS)
 	$(AR) $@ $^
 
 bonus: all
 
-$(OBJDIR)/mandatory/%.o: $(MANDATORY_DIR)/%.c | $(OBJDIR)/mandatory $(DEPDIR)/mandatory
-	$(CF) -MF $(DEPDIR)/mandatory/$*.d -c $< -o $@
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
+	$(CF) -MF $(DEPDIR)/$*.d -c $< -o $@
 
-$(OBJDIR)/mandatory $(DEPDIR)/mandatory:
+$(OBJDIR) $(DEPDIR):
 	$(MKDIR) $@
 
 clean:
@@ -64,4 +63,4 @@ re: fclean all
 
 .PHONY: all bonus clean fclean re
 
--include $(MANDATORY_DEPS)
+-include $(DEPS)

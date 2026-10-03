@@ -9,7 +9,9 @@ A custom implementation of the standard C `printf` function, handling conversion
 ├── include/
 │   └── ft_printf.h          # Public header file
 ├── src/
-│   └── mandatory/           # Printf core and conversion utilities
+│   ├── ft_printf.c          # Core printf implementation
+│   ├── utils.c              # Output utilities (char, str, nbr)
+│   └── utilsbis.c           # Hex and pointer address formatting
 ├── Makefile                 # Build configuration
 └── .github/
     └── workflows/           # CI/CD automation (build & release)
