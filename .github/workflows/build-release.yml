@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main ]
   push:
-    branches: [ main ]
+    branches: [ main, 'refactor/**' ]
   workflow_dispatch:
 
 permissions:
@@ -78,12 +78,30 @@ jobs:
           cp ../include/ft_printf.h .
           ls -la
 
+      - name: Determine release metadata
+        id: release_info
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            PR_NUM="${{ github.event.number }}"
+            echo "tag_name=pr-${PR_NUM}" >> $GITHUB_OUTPUT
+            echo "release_name=PR #${PR_NUM} Build" >> $GITHUB_OUTPUT
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            echo "publish=true" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "main" ]; then
+            echo "tag_name=latest" >> $GITHUB_OUTPUT
+            echo "release_name=Latest Build" >> $GITHUB_OUTPUT
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            echo "publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "publish=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish to GitHub Releases
         uses: softprops/action-gh-release@v2
-        if: ${{ success() }}
+        if: ${{ success() && steps.release_info.outputs.publish == 'true' }}
         with:
-          tag_name: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'latest' }}
-          name: ${{ github.event_name == 'pull_request' && format('PR #{0} Build', github.event.pull_request.number) || 'Latest Build' }}
+          tag_name: ${{ steps.release_info.outputs.tag_name }}
+          name: ${{ steps.release_info.outputs.release_name }}
           body: |
             ### Automated ft_printf Distribution Bundle
             - **Trigger**: `${{ github.event_name }}`
@@ -97,6 +115,6 @@ jobs:
             - **`ft_printf.h`**: Standalone C header
             - **`libftprintf.a`**: Standalone precompiled static library (Linux x86_64)
           draft: false
-          prerelease: ${{ github.event_name == 'pull_request' }}
+          prerelease: ${{ steps.release_info.outputs.is_prerelease == 'true' }}
           files: release-assets/*
         continue-on-error: true
