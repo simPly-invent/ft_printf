@@ -12,7 +12,7 @@
 
 #include <unistd.h>
 #include <stdarg.h>
-#include "../include/ft_printf.h"
+#include "ft_printf.h"
 
 static void	exec_bloc(va_list ptr, char c, int *nb)
 {

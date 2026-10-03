@@ -15,7 +15,6 @@
 
 # include <stdint.h>
 # include <unistd.h>
-# include <stdint.h>
 
 void	ft_putstr(char *str, int *nb);
 void	ft_putnbr_baseaddr(unsigned long nbr, int r, int *nb);
