@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/printf.h"
+#include "ft_printf.h"
 #include <unistd.h>
 #include <limits.h>
 
