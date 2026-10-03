@@ -45,8 +45,6 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(AR) $@ $^
 
-bonus: all
-
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 	$(CF) -MF $(DEPDIR)/$*.d -c $< -o $@
 
@@ -61,6 +59,6 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re
 
 -include $(DEPS)
