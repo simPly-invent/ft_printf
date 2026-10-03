@@ -1,0 +1,12 @@
+# Object and dependency directories
+.obj/
+.dep/
+
+# Binaries and libraries
+*.a
+*.o
+*.d
+*.out
+
+# OS generated files
+.DS_Store
