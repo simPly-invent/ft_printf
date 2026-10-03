@@ -1,0 +1,102 @@
+name: Build & Release
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify compilation (make all & make clean)
+        run: |
+          make all
+          ar -t libftprintf.a
+          make clean
+
+      - name: Build library (make)
+        run: |
+          make
+          ar -t libftprintf.a
+
+      - name: Package platform bundle
+        run: |
+          mkdir -p bundle/include bundle/lib
+          cp include/ft_printf.h bundle/include/
+          cp libftprintf.a bundle/lib/
+          tar -czf "libftprintf-${{ runner.os }}-${{ runner.arch }}.tar.gz" -C bundle .
+
+      - name: Upload platform bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "bundle-${{ runner.os }}-${{ runner.arch }}"
+          path: "libftprintf-${{ runner.os }}-${{ runner.arch }}.tar.gz"
+          retention-days: 14
+
+  release:
+    name: Publish Release & Distribution Packages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Prepare distribution packages
+        run: |
+          cd release-assets
+          # Default libftprintf.tar.gz points to Linux-X64
+          if [ -f "libftprintf-Linux-X64.tar.gz" ]; then
+            cp "libftprintf-Linux-X64.tar.gz" "libftprintf.tar.gz"
+            tar -xzf "libftprintf-Linux-X64.tar.gz" ./lib/libftprintf.a
+            mv lib/libftprintf.a libftprintf.a
+            rmdir lib 2>/dev/null || true
+          fi
+          # Also provide direct ft_printf.h header file
+          cp ../include/ft_printf.h .
+          ls -la
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: ${{ success() }}
+        with:
+          tag_name: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'latest' }}
+          name: ${{ github.event_name == 'pull_request' && format('PR #{0} Build', github.event.pull_request.number) || 'Latest Build' }}
+          body: |
+            ### Automated ft_printf Distribution Bundle
+            - **Trigger**: `${{ github.event_name }}`
+            - **Commit**: `${{ github.sha }}`
+            - **Branch**: `${{ github.head_ref || github.ref_name }}`
+
+            #### Available Packages:
+            - **`libftprintf.tar.gz`**: Standard bundle (Linux x86_64) with `include/ft_printf.h` & `lib/libftprintf.a`
+            - **`libftprintf-Linux-X64.tar.gz`**: Linux x86_64 distribution bundle
+            - **`libftprintf-macOS-ARM64.tar.gz`**: macOS Apple Silicon distribution bundle
+            - **`ft_printf.h`**: Standalone C header
+            - **`libftprintf.a`**: Standalone precompiled static library (Linux x86_64)
+          draft: false
+          prerelease: ${{ github.event_name == 'pull_request' }}
+          files: release-assets/*
+        continue-on-error: true
